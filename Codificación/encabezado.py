@@ -1,21 +1,21 @@
 from Nodos import NodoEncabezado, Nodocelda
 
 class listaEncabezado:
-    def __init__(self,primero=None):
-        self.primero=primero 
+    def __init__(self):
+        self.primero=None 
 
     def setEncabezado(self, nuevo):
         if self.primero== None: 
             self.primero=nuevo
-        elif nuevo.id < self.primero.id:
+        elif int(nuevo.index) < int(self.primero.index):
             nuevo.siguiente=self.primero
             self.primero.anterior=nuevo
             self.primero=nuevo
         else:
             actual=self.primero
-            while actual.siguiente != None:
+            while actual.siguiente is not None:
             
-                if nuevo.id < actual.siguiente.id:
+                if int(nuevo.index) < int(actual.siguiente.index):
                     nuevo.siguiente=actual.siguiente
                     actual.siguiente.anterior=nuevo
                     nuevo.anterior=actual
@@ -27,10 +27,10 @@ class listaEncabezado:
                 actual.siguiente=nuevo
                 nuevo.anterior=actual
 
-    def getEncabezado(self,id):
+    def getEncabezado(self,index):
         actual=self.primero
         while actual != None:
-            if actual.id == id:
+            if actual.index == index:
                 return actual
             actual=actual.siguiente
         return None

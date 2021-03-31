@@ -1,7 +1,7 @@
 # ------------------------- Clases para crear las listas doblemente enlazadas de las cabeceras/cabezas para filas y para columnas
 class NodoEncabezado:
-	def __init__(self, id):
-		self.id = id
+	def __init__(self, index):
+		self.index = index
 		self.anterior = None
 		self.siguiente = None
 		self.accesoNodo=None
@@ -16,3 +16,10 @@ class Nodocelda:
 		self.derecha = None 
 		self.izquierda = None
 
+class NodoListaMatrices:
+    def __init__(self, m, n, nombre, matriz):
+        self.m=m 
+        self.n=n
+        self.nombre=nombre
+        self.matriz=matriz
+        self.siguiente=None 
