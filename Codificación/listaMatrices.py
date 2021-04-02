@@ -29,6 +29,7 @@ class lista:
         while temp is not None:
             if str(temp.nombre) == str(name):
                 return temp 
+            temp=temp.siguiente    
         return None
 
 

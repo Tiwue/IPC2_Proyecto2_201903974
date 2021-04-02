@@ -76,3 +76,20 @@ class Matriz:
             if temp.columna== x:
                 return temp
             temp=temp.derecha 
+
+    def getUltimoByColumnas(self,x):
+        columna = self.ecolumnas.getEncabezado(x)
+        temp = columna.accesoNodo
+        while temp.abajo != None:
+            temp=temp.abajo
+        return temp     
+
+    def getUltimoByFilas(self,x):
+        fila = self.efilas.getEncabezado(x)
+        temp = fila.accesoNodo
+        while temp.derecha != None:
+            temp=temp.derecha
+        return temp   
+
+    
+
