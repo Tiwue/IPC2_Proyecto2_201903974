@@ -32,7 +32,12 @@ class lista:
             temp=temp.siguiente    
         return None
 
-
+    def setMatriz(self, name, matriz):
+        temp=self.primero
+        while temp is not None:
+            if str(temp.nombre) == str(name):
+                temp.matriz=matriz
+            temp=temp.siguiente
 
 
 

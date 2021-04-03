@@ -2,9 +2,9 @@ from Nodos import Nodocelda, NodoEncabezado
 from encabezado import listaEncabezado
 
 class Matriz:
-    def __init__(self):
-        self.efilas=listaEncabezado()
-        self.ecolumnas=listaEncabezado()
+    def __init__(self, efilas, ecolumnas):
+        self.efilas=efilas
+        self.ecolumnas=ecolumnas
       
 
     def add(self,fila, columna, caracter):
