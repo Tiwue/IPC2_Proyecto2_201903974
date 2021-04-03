@@ -91,5 +91,12 @@ class Matriz:
             temp=temp.derecha
         return temp   
 
-    
+    def getPrimeroByColumnas(self,x):
+        columna = self.ecolumnas.getEncabezado(x)
+        temp = columna.accesoNodo
+        return temp
 
+    def getPrimeroByFilas(self,x):
+        fila = self.efilas.getEncabezado(x)
+        temp = fila.accesoNodo
+        return temp

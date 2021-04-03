@@ -313,6 +313,136 @@ def Limpiar(init_x, init_y, end_x, end_y):
     else:
         messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")
 
+def lineaVertical(init_x, init_y, largo):
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2
+    nombre= str(eleccionSingle.get())
+    print("Esta es la matriz seleccionada:"+str(nombre))
+    print("Creando linea vertical...") 
+    
+    matriz = matrices.getMatriz(nombre)
+    m=matriz.m
+    n=matriz.n
+    efilas=listaEncabezado()
+    ecolumnas=listaEncabezado()
+    resultado=Matriz(efilas,ecolumnas)
+    generarImagen(matriz.matriz,m,n,nombre)
+
+    if int(init_x) <= int(n) and int(init_y)<=int(m):  
+        
+        if (int(init_y)+int(largo)-1)<=int(m): 
+            
+            i=int(init_x)
+            
+            for x in range(1, int(matriz.n)+1):
+                
+                j=int(init_y)
+                nodo=matriz.matriz.getPrimeroByColumnas(str(x))
+                
+                while nodo is not None:
+                    
+                    if int(nodo.columna)==i and int(nodo.fila)==j:
+                        if j <= (int(init_y)+int(largo)-1):
+                            caracter="*"
+                            resultado.add(str(nodo.fila), str(nodo.columna), caracter)
+                            if j < (int(init_y)+int(largo)-1):
+                               j+=1
+                    else:
+                        caracter=nodo.caracter
+                        resultado.add(str(nodo.fila),str(nodo.columna), caracter)           
+                    nodo=nodo.abajo
+
+            nombreImagen= nombre+'_resultado'
+            generarImagen(resultado,m,n,nombreImagen)
+        
+            img1 = Image.open( nombre+'.png')  
+            img1 = img1.resize((450, 450), Image.ANTIALIAS)
+            photo1 = ImageTk.PhotoImage(img1)
+            canvas1.create_image(225,225,image=photo1)
+            matriz.matriz.ecolumnas=resultado.ecolumnas
+            matriz.matriz.efilas=resultado.efilas
+            matrices.setMatriz(nombre,matriz.matriz)
+            generarImagen(resultado,m,n,nombreImagen)
+            canvas1.pack(fill=None, expand=False)
+            
+            img2 = Image.open( nombre+'_resultado.png')  
+            img2 = img2.resize((450, 450), Image.ANTIALIAS)
+            photo2 = ImageTk.PhotoImage(img2)
+            canvas2.create_image(225,225,image=photo2)
+            canvas2.pack(fill=None, expand=False)
+            canvas2.update()
+            frameSingle.pack()
+            frameBienvenida.pack_forget()
+            Ventana.mainloop()
+        else:
+            messagebox.showwarning(message="Debe elegir una longitud dentro del tamaño de la imagen", title="Error")
+    else:
+        messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")  
+
+def lineaHorizontal(init_x, init_y, largo):
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2
+    nombre= str(eleccionSingle.get())
+    print("Esta es la matriz seleccionada:"+str(nombre))
+    print("Creando linea horizontal...") 
+    
+    matriz = matrices.getMatriz(nombre)
+    m=matriz.m
+    n=matriz.n
+    efilas=listaEncabezado()
+    ecolumnas=listaEncabezado()
+    resultado=Matriz(efilas,ecolumnas)
+    generarImagen(matriz.matriz,m,n,nombre)
+
+    if int(init_x) <= int(n) and int(init_y)<=int(m):  
+        
+        if (int(init_x)+int(largo)-1)<=int(n): 
+            
+            j=int(init_y)
+            
+            for y in range(1, int(matriz.m)+1):
+                
+                i=int(init_x)
+                nodo=matriz.matriz.getPrimeroByFilas(str(y))
+                
+                while nodo is not None:
+                    
+                    if int(nodo.columna)==i and int(nodo.fila)==j:
+                        if i <= (int(init_x)+int(largo)-1):
+                            caracter="*"
+                            resultado.add(str(nodo.fila), str(nodo.columna), caracter)
+                            if i < (int(init_x)+int(largo)-1):
+                               i+=1
+                    else:
+                        caracter=nodo.caracter
+                        resultado.add(str(nodo.fila),str(nodo.columna), caracter)           
+                    nodo=nodo.derecha
+
+            nombreImagen= nombre+'_resultado'
+            generarImagen(resultado,m,n,nombreImagen)
+        
+            img1 = Image.open( nombre+'.png')  
+            img1 = img1.resize((450, 450), Image.ANTIALIAS)
+            photo1 = ImageTk.PhotoImage(img1)
+            canvas1.create_image(225,225,image=photo1)
+            matriz.matriz.ecolumnas=resultado.ecolumnas
+            matriz.matriz.efilas=resultado.efilas
+            matrices.setMatriz(nombre,matriz.matriz)
+            generarImagen(resultado,m,n,nombreImagen)
+            canvas1.pack(fill=None, expand=False)
+            
+            img2 = Image.open( nombre+'_resultado.png')  
+            img2 = img2.resize((450, 450), Image.ANTIALIAS)
+            photo2 = ImageTk.PhotoImage(img2)
+            canvas2.create_image(225,225,image=photo2)
+            canvas2.pack(fill=None, expand=False)
+            canvas2.update()
+            frameSingle.pack()
+            frameBienvenida.pack_forget()
+            Ventana.mainloop()
+        else:
+            messagebox.showwarning(message="Debe elegir una longitud dentro del tamaño de la imagen", title="Error")
+    else:
+        messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")    
+
 def ventanaCoordenadas():
     import tkinter as tk
     global eleccionSingle, Ventana
@@ -439,7 +569,6 @@ def ventanaDoble():
     Vent2.geometry("200x200")
     Vent2.config(bg="grey14")
 
-
 def ventanaLineaHorizontal():
 
     import tkinter as tk
@@ -485,7 +614,7 @@ def ventanaLineaHorizontal():
     entry3.place(relx=0.2, rely=0.65)
     
 
-    boton1=Button(Vent2, text="Agregar Linea!")
+    boton1=Button(Vent2, text="Agregar Linea!",command= lambda: lineaHorizontal(entry1.get(),entry2.get(),entry3.get()))
     boton1.pack()
     boton1.place(relx = 0.5, rely = 0.8)
     boton1.config(bg="grey14",fg="white")
@@ -535,7 +664,7 @@ def ventanaLineaVertical():
     entry3.place(relx=0.2, rely=0.65)
     
 
-    boton1=Button(Vent2, text="Agregar Linea!")
+    boton1=Button(Vent2, text="Agregar Linea!",command= lambda: lineaVertical(entry1.get(),entry2.get(),entry3.get()))
     boton1.pack()
     boton1.place(relx = 0.5, rely = 0.8)
     boton1.config(bg="grey14",fg="white")
@@ -544,7 +673,7 @@ Ventana = Tk()
 Ventana.title("Pricipal")
 Ventana.geometry("1200x650")
 Ventana.config(bg="grey14")
-   
+
 eleccionSingle = tk.StringVar()
 eleccionDoble1= tk.StringVar()
 eleccionDoble2= tk.StringVar()
@@ -556,11 +685,25 @@ frameBotones.pack(fill=tk.X, side='top')
 frameBotones.config(bg="grey7")
 
 frameBienvenida = Frame(Ventana,width=1200, height=600)
-frameBienvenida.pack( side='bottom')
-frameBienvenida.config(bg="grey14")
+
 
 frameSingle = Frame(Ventana,width=1200, height=600)
 frameSingle.config(bg="grey14")
+
+frameDoble = Frame(Ventana,width=1200, height=600)
+frameDoble.config(bg="grey14")
+frameDoble.pack( side='bottom')
+frameDoble.config(bg="grey14")
+
+panelDoble1=Frame(frameDoble,width=325, height=400)
+panelDoble1.pack()
+panelDoble1.place(relx = 0.05, rely = 0.1)
+panelDoble1.config(relief="sunken",bd=3) 
+
+panelDoble2=Frame(frameDoble,width=325, height=400)
+panelDoble2.pack()
+panelDoble2.place(relx = 0.4, rely = 0.1)
+panelDoble2.config(relief="sunken",bd=3) 
 
 boton1=Button(frameBotones,text="Cargar Archivo",height = 1,width = 15, font=fontBotones,relief="flat",command=carga)
 boton1.pack()
