@@ -648,6 +648,169 @@ def union():
     else:
         messagebox.showwarning(message="Debe elegir matrices distintas", title="Error")
 
+def interseccion():
+    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble
+    nombre1= str(eleccionDoble1.get())
+    nombre2=str(eleccionDoble2.get())
+    print("Esta es la primer matriz seleccionada:"+str(nombre1))
+    print("Esta es la segunda matriz seleccionada:"+str(nombre2))
+    print("Creando  interseccion...") 
+    
+    matriz1 = matrices.getMatriz(nombre1)
+    matriz2 = matrices.getMatriz(nombre2)
+    m1=matriz1.m
+    n1=matriz1.n
+
+    m2=matriz2.m
+    n2=matriz2.n
+
+    efilas=listaEncabezado()
+    ecolumnas=listaEncabezado()
+    resultado=Matriz(efilas,ecolumnas)
+    
+    if nombre1 != nombre2:
+        if int(m1) == int(m2) and int(n1) == int(n2):
+            
+            for x in range(1, int(n1)+1):
+                nodo1=matriz1.matriz.getPrimeroByColumnas(str(x))
+                nodo2=matriz2.matriz.getPrimeroByColumnas(str(x))
+                y=1
+                while nodo1 is not None and nodo2 is not None:
+                    caracter1=nodo1.caracter
+                    caracter2=nodo2.caracter
+
+                    if caracter1 == "*" and caracter2=="*":
+                        caracter="*"
+                        resultado.add(str(y), str(x), caracter)
+                    else:
+                        caracter="-"
+                        resultado.add(str(y), str(x), caracter)
+                    y+=1
+                    nodo1=nodo1.abajo
+                    nodo2=nodo2.abajo        
+
+            nombreImagen= str(nombre1+'_n_'+ nombre2+'_Resultado')
+            generarImagen(resultado,m1,n1,nombreImagen)
+            
+            img1Doble = Image.open( nombre1+'.png')  
+            img1Doble = img1Doble.resize((325, 400), Image.ANTIALIAS)
+            photo1 = ImageTk.PhotoImage(img1Doble)
+            canvasDoble1.create_image(163,200,image=photo1)
+            matrices.add(m1,n1,nombreImagen,resultado)
+            nombresMatrices.append(nombreImagen)
+            generarImagen(resultado,m1,n1,nombreImagen)
+            canvasDoble1.pack(fill=None, expand=False)
+
+        
+            
+            img2Doble = Image.open( nombre2+'.png')  
+            img2Doble= img2Doble.resize((325, 400), Image.ANTIALIAS)
+            photo2 = ImageTk.PhotoImage(img2Doble)
+            canvasDoble2.create_image(163,200,image=photo2)
+            canvasDoble2.pack(fill=None, expand=False)
+            
+
+            img3Doble = Image.open( nombreImagen+'.png')  
+            img3Doble = img3Doble.resize((325, 400), Image.ANTIALIAS)
+            photo3 = ImageTk.PhotoImage(img3Doble)
+            canvasDoble3.create_image(163,200,image=photo3)
+            canvasDoble3.pack(fill=None, expand=False)
+            canvasDoble2.update()
+            canvasDoble1.update()
+            canvasDoble3.update()
+            frameDoble.pack()
+            frameBienvenida.pack_forget()
+            frameSingle.pack_forget()
+            Ventana.mainloop()
+        else:
+            messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")        
+    else:
+        messagebox.showwarning(message="Debe elegir matrices distintas", title="Error")
+
+def diferencia():
+    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble
+    nombre1= str(eleccionDoble1.get())
+    nombre2=str(eleccionDoble2.get())
+    print("Esta es la primer matriz seleccionada:"+str(nombre1))
+    print("Esta es la segunda matriz seleccionada:"+str(nombre2))
+    print("Creando  interseccion...") 
+    
+    matriz1 = matrices.getMatriz(nombre1)
+    matriz2 = matrices.getMatriz(nombre2)
+    m1=matriz1.m
+    n1=matriz1.n
+
+    m2=matriz2.m
+    n2=matriz2.n
+
+    efilas=listaEncabezado()
+    ecolumnas=listaEncabezado()
+    resultado=Matriz(efilas,ecolumnas)
+    
+    if nombre1 != nombre2:
+        if int(m1) == int(m2) and int(n1) == int(n2):
+            
+            for x in range(1, int(n1)+1):
+                nodo1=matriz1.matriz.getPrimeroByColumnas(str(x))
+                nodo2=matriz2.matriz.getPrimeroByColumnas(str(x))
+                y=1
+                while nodo1 is not None and nodo2 is not None:
+                    caracter1=nodo1.caracter
+                    caracter2=nodo2.caracter
+
+                    if caracter1 == "*" and caracter2=="-":
+                        caracter="*"
+                        resultado.add(str(y), str(x), caracter)
+                    elif caracter1 == "*" and caracter2=="*":
+                        caracter="-"
+                        resultado.add(str(y), str(x), caracter)
+                    elif caracter1 == "-" and caracter2=="*":
+                        caracter="-"
+                        resultado.add(str(y), str(x), caracter)
+                    elif caracter1 == "-" and caracter2=="-":
+                        caracter="-"
+                        resultado.add(str(y), str(x), caracter)     
+                    y+=1
+                    nodo1=nodo1.abajo
+                    nodo2=nodo2.abajo        
+
+            nombreImagen= str(nombre1+'_!=_'+ nombre2+'_Resultado')
+            generarImagen(resultado,m1,n1,nombreImagen)
+            
+            img1Doble = Image.open( nombre1+'.png')  
+            img1Doble = img1Doble.resize((325, 400), Image.ANTIALIAS)
+            photo1 = ImageTk.PhotoImage(img1Doble)
+            canvasDoble1.create_image(163,200,image=photo1)
+            matrices.add(m1,n1,nombreImagen,resultado)
+            nombresMatrices.append(nombreImagen)
+            generarImagen(resultado,m1,n1,nombreImagen)
+            canvasDoble1.pack(fill=None, expand=False)
+
+        
+            
+            img2Doble = Image.open( nombre2+'.png')  
+            img2Doble= img2Doble.resize((325, 400), Image.ANTIALIAS)
+            photo2 = ImageTk.PhotoImage(img2Doble)
+            canvasDoble2.create_image(163,200,image=photo2)
+            canvasDoble2.pack(fill=None, expand=False)
+            
+
+            img3Doble = Image.open( nombreImagen+'.png')  
+            img3Doble = img3Doble.resize((325, 400), Image.ANTIALIAS)
+            photo3 = ImageTk.PhotoImage(img3Doble)
+            canvasDoble3.create_image(163,200,image=photo3)
+            canvasDoble3.pack(fill=None, expand=False)
+            canvasDoble2.update()
+            canvasDoble1.update()
+            canvasDoble3.update()
+            frameDoble.pack()
+            frameBienvenida.pack_forget()
+            frameSingle.pack_forget()
+            Ventana.mainloop()
+        else:
+            messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")        
+    else:
+        messagebox.showwarning(message="Debe elegir matrices distintas", title="Error")
 def ventanaDoble():
     
     import tkinter as tk
@@ -688,12 +851,12 @@ def ventanaDoble():
     boton1.place(relx = 0.2, rely = 0.6)
     boton1.config(bg="grey14",fg="white")
 
-    boton2=Button(Vent2,text="Intersección",height = 1,width = 18, font=('Arial', 10),relief="raised")
+    boton2=Button(Vent2,text="Intersección",height = 1,width = 18, font=('Arial', 10),relief="raised", command=interseccion)
     boton2.pack()
     boton2.place(relx = 0.55, rely = 0.6)
     boton2.config(bg="grey14",fg="white")
 
-    boton3=Button(Vent2,text="Diferencia",height = 1,width = 18, font=('Arial', 10),relief="raised")
+    boton3=Button(Vent2,text="Diferencia",height = 1,width = 18, font=('Arial', 10),relief="raised", command=diferencia)
     boton3.pack()
     boton3.place(relx = 0.2, rely = 0.75)
     boton3.config(bg="grey14",fg="white")
