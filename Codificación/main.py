@@ -88,7 +88,7 @@ def carga():
 def ventanaOperaciones1():
     Vent1 = tk.Toplevel()
     Vent1.title("Operaciones")
-    Vent1.geometry("500x500")
+    Vent1.geometry("500x400")
     Vent1.config(bg="grey14")
 
     boton1= Button(Vent1, text="Operaciones con Una Imagen",height = 1,width = 25, font=fontBotones,relief=RAISED, command= ventanaSingle)
@@ -102,7 +102,7 @@ def ventanaOperaciones1():
     boton1.config(bg="grey14",fg="white")
 
 def invertirHorizontal():
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Rotando Horizontalmete...") 
@@ -147,10 +147,11 @@ def invertirHorizontal():
     canvas2.update()
     frameSingle.pack()
     frameBienvenida.pack_forget()
+    frameDoble.pack_forget()
     Ventana.mainloop()
 
 def invertirVertical():
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2,frameDoble
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Rotando Verticalmente...") 
@@ -192,10 +193,11 @@ def invertirVertical():
     canvas2.update()
     frameSingle.pack()
     frameBienvenida.pack_forget()
+    frameDoble.pack_forget()
     Ventana.mainloop()
 
 def transponer():
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2,frameDoble
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Transponiendo Imagen...")
@@ -214,14 +216,14 @@ def transponer():
         y=1
         while nodo is not None:
             caracter=nodo.caracter
-            resultado1.add(str(y),str(x),caracter)
+            resultado1.add(str(x),str(y),caracter)
             y+=1
             nodo = nodo.arriba
     efilas2=listaEncabezado()
     ecolumnas2=listaEncabezado()
     resultado2=Matriz(efilas2,ecolumnas2)
 
-    for y in range(1, int(matriz.m)+1):
+    for y in range(1, int(matriz.n)+1):
         nodo=resultado1.getUltimoByFilas(str(y))
         x=1
         while nodo is not None:
@@ -230,7 +232,7 @@ def transponer():
             x+=1
             nodo = nodo.izquierda
     nombreImagen= nombre+'_resultado'
-    generarImagen(resultado2,m,n,nombreImagen)
+    generarImagen(resultado2,n,m,nombreImagen)
    
     img1 = Image.open( nombre+'.png')  
     img1 = img1.resize((450, 450), Image.ANTIALIAS)
@@ -239,6 +241,7 @@ def transponer():
     matriz.matriz.ecolumnas=resultado2.ecolumnas
     matriz.matriz.efilas=resultado2.efilas
     matrices.setMatriz(nombre,matriz.matriz)
+    matrices.setDimensiones(nombre,n,m)
     canvas1.pack(fill=None, expand=False)
     
     img2 = Image.open( nombre+'_resultado.png')  
@@ -249,10 +252,11 @@ def transponer():
     canvas2.update()
     frameSingle.pack()
     frameBienvenida.pack_forget()
+    frameDoble.pack_forget()
     Ventana.mainloop()
 
 def Limpiar(init_x, init_y, end_x, end_y):
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2,frameDoble
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Limpiando zona...") 
@@ -308,13 +312,14 @@ def Limpiar(init_x, init_y, end_x, end_y):
         canvas2.update()
         frameSingle.pack()
         frameBienvenida.pack_forget()
+        frameDoble.pack_forget()
         Ventana.mainloop()
 
     else:
         messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")
 
 def lineaVertical(init_x, init_y, largo):
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Creando linea vertical...") 
@@ -372,6 +377,7 @@ def lineaVertical(init_x, init_y, largo):
             canvas2.update()
             frameSingle.pack()
             frameBienvenida.pack_forget()
+            frameDoble.pack_forget()
             Ventana.mainloop()
         else:
             messagebox.showwarning(message="Debe elegir una longitud dentro del tamaño de la imagen", title="Error")
@@ -379,7 +385,7 @@ def lineaVertical(init_x, init_y, largo):
         messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")  
 
 def lineaHorizontal(init_x, init_y, largo):
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Creando linea horizontal...") 
@@ -437,6 +443,7 @@ def lineaHorizontal(init_x, init_y, largo):
             canvas2.update()
             frameSingle.pack()
             frameBienvenida.pack_forget()
+            frameDoble.pack_forget()
             Ventana.mainloop()
         else:
             messagebox.showwarning(message="Debe elegir una longitud dentro del tamaño de la imagen", title="Error")
@@ -562,12 +569,139 @@ def ventanaSingle():
     boton8.place(relx = 0.7, rely = 0.8)
     boton8.config(bg="grey14",fg="white")
 
+def union():
+    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble
+    nombre1= str(eleccionDoble1.get())
+    nombre2=str(eleccionDoble2.get())
+    print("Esta es la primer matriz seleccionada:"+str(nombre1))
+    print("Esta es la segunda matriz seleccionada:"+str(nombre2))
+    print("Uniendo...") 
+    
+    matriz1 = matrices.getMatriz(nombre1)
+    matriz2 = matrices.getMatriz(nombre2)
+    m1=matriz1.m
+    n1=matriz1.n
+
+    m2=matriz2.m
+    n2=matriz2.n
+
+    efilas=listaEncabezado()
+    ecolumnas=listaEncabezado()
+    resultado=Matriz(efilas,ecolumnas)
+    
+    if nombre1 != nombre2:
+        if int(m1) == int(m2) and int(n1) == int(n2):
+            
+            for x in range(1, int(n1)+1):
+                nodo1=matriz1.matriz.getPrimeroByColumnas(str(x))
+                nodo2=matriz2.matriz.getPrimeroByColumnas(str(x))
+                y=1
+                while nodo1 is not None and nodo2 is not None:
+                    caracter1=nodo1.caracter
+                    caracter2=nodo2.caracter
+
+                    if caracter1 == "*" or caracter2=="*":
+                        caracter="*"
+                        resultado.add(str(y), str(x), caracter)
+                    else:
+                        caracter="-"
+                        resultado.add(str(y), str(x), caracter)
+                    y+=1
+                    nodo1=nodo1.abajo
+                    nodo2=nodo2.abajo        
+
+            nombreImagen= str(nombre1+'_U_'+ nombre2+'_Resultado')
+            generarImagen(resultado,m1,n1,nombreImagen)
+            
+            img1Doble = Image.open( nombre1+'.png')  
+            img1Doble = img1Doble.resize((325, 400), Image.ANTIALIAS)
+            photo1 = ImageTk.PhotoImage(img1Doble)
+            canvasDoble1.create_image(163,200,image=photo1)
+            matrices.add(m1,n1,nombreImagen,resultado)
+            nombresMatrices.append(nombreImagen)
+            generarImagen(resultado,m1,n1,nombreImagen)
+            canvasDoble1.pack(fill=None, expand=False)
+
+        
+            
+            img2Doble = Image.open( nombre2+'.png')  
+            img2Doble= img2Doble.resize((325, 400), Image.ANTIALIAS)
+            photo2 = ImageTk.PhotoImage(img2Doble)
+            canvasDoble2.create_image(163,200,image=photo2)
+            canvasDoble2.pack(fill=None, expand=False)
+            
+
+            img3Doble = Image.open( nombreImagen+'.png')  
+            img3Doble = img3Doble.resize((325, 400), Image.ANTIALIAS)
+            photo3 = ImageTk.PhotoImage(img3Doble)
+            canvasDoble3.create_image(163,200,image=photo3)
+            canvasDoble3.pack(fill=None, expand=False)
+            canvasDoble2.update()
+            canvasDoble1.update()
+            canvasDoble3.update()
+            frameDoble.pack()
+            frameBienvenida.pack_forget()
+            frameSingle.pack_forget()
+            Ventana.mainloop()
+        else:
+            messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")        
+    else:
+        messagebox.showwarning(message="Debe elegir matrices distintas", title="Error")
+
 def ventanaDoble():
     
+    import tkinter as tk
+    global nombresMatrices, eleccionDoble1, Ventana, eleccionDoble2
+
     Vent2=tk.Toplevel()    
     Vent2.title("Operaciones con Dos Imagenes")
-    Vent2.geometry("200x200")
+    Vent2.geometry("600x400")
     Vent2.config(bg="grey14")
+
+
+    label=Label(Vent2, text="Seleccione Imagen 1:",font=('Arial', 10), fg="white", bg="grey14")
+    label.pack()
+    label.place(relx=0.15, rely=0.2)
+
+    label2=Label(Vent2, text="Seleccione Imagen 2:",font=('Arial', 10), fg="white", bg="grey14")
+    label2.pack()
+    label2.place(relx=0.5, rely=0.2)
+
+    if nombresMatrices[0] is not None:
+        eleccionDoble1.set(nombresMatrices[0])
+        eleccionDoble2.set(nombresMatrices[0])
+
+    opt = OptionMenu(Vent2, eleccionDoble1, *nombresMatrices)
+    opt.config(width=10, font=('Arial', 12))
+    opt.pack()
+    opt.place(relx=0.2, rely= 0.3)
+    opt.update()
+
+    opt2 = OptionMenu(Vent2, eleccionDoble2, *nombresMatrices)
+    opt2.config(width=10, font=('Arial', 12))
+    opt2.pack()
+    opt2.place(relx=0.55, rely= 0.3)
+    opt2.update()
+
+    boton1=Button(Vent2,text="Union",height = 1,width = 18, font=('Arial', 10),relief="raised", command=union)
+    boton1.pack()
+    boton1.place(relx = 0.2, rely = 0.6)
+    boton1.config(bg="grey14",fg="white")
+
+    boton2=Button(Vent2,text="Intersección",height = 1,width = 18, font=('Arial', 10),relief="raised")
+    boton2.pack()
+    boton2.place(relx = 0.55, rely = 0.6)
+    boton2.config(bg="grey14",fg="white")
+
+    boton3=Button(Vent2,text="Diferencia",height = 1,width = 18, font=('Arial', 10),relief="raised")
+    boton3.pack()
+    boton3.place(relx = 0.2, rely = 0.75)
+    boton3.config(bg="grey14",fg="white")
+
+    boton4=Button(Vent2,text="Diferencia Simetrica",height = 1,width = 18, font=('Arial', 10),relief="raised")
+    boton4.pack()
+    boton4.place(relx = 0.55, rely = 0.75)
+    boton4.config(bg="grey14",fg="white")
 
 def ventanaLineaHorizontal():
 
@@ -685,15 +819,15 @@ frameBotones.pack(fill=tk.X, side='top')
 frameBotones.config(bg="grey7")
 
 frameBienvenida = Frame(Ventana,width=1200, height=600)
-
+frameBienvenida.pack( side='bottom')
+frameBienvenida.config(bg="grey14")
 
 frameSingle = Frame(Ventana,width=1200, height=600)
 frameSingle.config(bg="grey14")
 
 frameDoble = Frame(Ventana,width=1200, height=600)
 frameDoble.config(bg="grey14")
-frameDoble.pack( side='bottom')
-frameDoble.config(bg="grey14")
+
 
 panelDoble1=Frame(frameDoble,width=325, height=400)
 panelDoble1.pack()
@@ -702,8 +836,41 @@ panelDoble1.config(relief="sunken",bd=3)
 
 panelDoble2=Frame(frameDoble,width=325, height=400)
 panelDoble2.pack()
-panelDoble2.place(relx = 0.4, rely = 0.1)
+panelDoble2.place(relx = 0.35, rely = 0.1)
 panelDoble2.config(relief="sunken",bd=3) 
+
+panelDoble3=Frame(frameDoble,width=325, height=400)
+panelDoble3.pack()
+panelDoble3.place(relx = 0.7, rely = 0.1)
+panelDoble3.config(relief="sunken",bd=3) 
+
+labelDoble1=Label(frameDoble, text="Matriz 1", font=('Verdana', 12), fg="white", bg="grey14")
+labelDoble1.pack()
+labelDoble1.place(relx = 0.15, rely = 0.8)
+
+labelDoble2=Label(frameDoble, text="Matriz 2", font=('Verdana', 12), fg="white", bg="grey14")
+labelDoble2.pack()
+labelDoble2.place(relx = 0.45, rely = 0.8)
+
+labelDoble2=Label(frameDoble, text="Resultado", font=('Verdana', 12), fg="white", bg="grey14")
+labelDoble2.pack()
+labelDoble2.place(relx = 0.8, rely = 0.8)
+
+labelDoble3=Label(frameDoble, text="=", font=('Verdana', 20), fg="white", bg="grey14")
+labelDoble3.pack()
+labelDoble3.place(relx = 0.65, rely = 0.4)
+
+img1Doble = Image.open( 'default.png')
+canvasDoble1=Canvas(panelDoble1, height=400, width=325)
+canvasDoble1.update()
+
+img2Doble = Image.open( 'default.png')
+canvasDoble2=Canvas(panelDoble2, height=400, width=325)
+canvasDoble2.update()
+
+img3Doble = Image.open( 'default.png')
+canvasDoble3=Canvas(panelDoble3, height=400, width=325)
+canvasDoble3.update()
 
 boton1=Button(frameBotones,text="Cargar Archivo",height = 1,width = 15, font=fontBotones,relief="flat",command=carga)
 boton1.pack()

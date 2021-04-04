@@ -13,7 +13,7 @@ class lista:
             actual=self.primero
             while actual.siguiente is not None:
 
-                actual.siguiente=actual
+                actual=actual.siguiente
             actual.siguiente=nuevo
 
     def length(self):
@@ -37,6 +37,14 @@ class lista:
         while temp is not None:
             if str(temp.nombre) == str(name):
                 temp.matriz=matriz
+            temp=temp.siguiente
+            
+    def setDimensiones(self, name, m, n):
+        temp=self.primero
+        while temp is not None:
+            if str(temp.nombre) == str(name):
+                temp.m=m
+                temp.n=n
             temp=temp.siguiente
 
 
