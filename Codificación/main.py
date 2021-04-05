@@ -12,11 +12,38 @@ from encabezado import listaEncabezado
 import PIL
 from PIL import Image, ImageTk
 from tkinter import messagebox
-
+import time
+import os
 tree = None
 root=None
 matrices=lista()
 nombresMatrices=list()
+logs=list()
+
+def generarLogs():
+    global logs
+    inicio='''<!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset=utf-8 />
+        <title>Registros</title>
+    </head>
+    <body style="background-image:url(https://fondosmil.com/fondo/22293.jpg);background-size: cover; background-attachment: fixed;color:white;">
+    <div>
+      <h1 style="font-size:300%;text-align:center;padding-top:25px;padding-botton:30px;font-family:candara;">Logs</h1>
+    </div>
+    <hr>
+    <div style="font-size:100%;text-align:left;padding-top:25px;padding-botton:25px;font-family:Arial;;padding-left:150px;">'''
+    mitad=""
+    for element in logs:
+        mitad=mitad+"<p>"+element+"</p>"
+    fin='''</div></body></html>'''  
+    cadena=inicio+mitad+fin
+    f = open ('lOGS.html','w')
+    f.write(cadena)
+    f.close()
+    os.system("logs.html") 
+
 
 def generarImagen(matriz, m , n, nombre):
    
@@ -44,7 +71,7 @@ def generarImagen(matriz, m , n, nombre):
     s.render()
 
 def carga():
-        global tree,root,matrices,nombresMatrices
+        global tree,root,matrices,nombresMatrices,logs
     
         ventana=Tk()
        
@@ -65,6 +92,8 @@ def carga():
             imagen=Matriz(efilas,ecolumnas)
             fila=0
             columna=0
+            llenos=0
+            vacios=0
             for caracter in str(textoImagen):
                 if caracter == ' ':
                     continue
@@ -73,16 +102,23 @@ def carga():
                 elif caracter == '-':
                     columna+=1
                     imagen.add(str(fila),str(columna),caracter)
+                    vacios+=1
                 elif caracter == '*':
                     columna+=1
                     imagen.add(str(fila),str(columna),caracter)
+                    llenos+=1
                 elif caracter== '\n':
                     fila+=1
                     columna=0
             matrices.add(m,n,nombre,imagen)
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-"+nombre+"-"+"Espacios llenos:"+str(llenos)+"-Espacios vacios:"+str(vacios)
+            logs.append(log)
             nombresMatrices.append(nombre)                   
             generarImagen(imagen,m,n,nombre)
         messagebox.showinfo(message="Archivo leido exitosamente", title="Done")
+        for element in logs:
+            print(element)
         ventana.destroy()
 
 def ventanaOperaciones1():
@@ -102,7 +138,7 @@ def ventanaOperaciones1():
     boton1.config(bg="grey14",fg="white")
 
 def invertirHorizontal():
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble, logs
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Rotando Horizontalmete...") 
@@ -145,13 +181,16 @@ def invertirHorizontal():
     canvas2.create_image(225,225,image=photo2)
     canvas2.pack(fill=None, expand=False)
     canvas2.update()
+    fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    log=fecha+"-Invertir en Horizontal- Matriz utilizada: "+nombre
+    logs.append(log)
     frameSingle.pack()
     frameBienvenida.pack_forget()
     frameDoble.pack_forget()
     Ventana.mainloop()
 
 def invertirVertical():
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2,frameDoble
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2,frameDoble,logs
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Rotando Verticalmente...") 
@@ -191,13 +230,16 @@ def invertirVertical():
     canvas2.create_image(225,225,image=photo2)
     canvas2.pack(fill=None, expand=False)
     canvas2.update()
+    fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    log=fecha+"-Invertir en Vertical- Matriz utilizada: "+nombre
+    logs.append(log)
     frameSingle.pack()
     frameBienvenida.pack_forget()
     frameDoble.pack_forget()
     Ventana.mainloop()
 
 def transponer():
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2,frameDoble
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2,frameDoble,logs
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Transponiendo Imagen...")
@@ -250,13 +292,16 @@ def transponer():
     canvas2.create_image(225,225,image=photo2)
     canvas2.pack(fill=None, expand=False)
     canvas2.update()
+    fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+    log=fecha+"-Transpuesta- Matriz utilizada: "+nombre
+    logs.append(log)
     frameSingle.pack()
     frameBienvenida.pack_forget()
     frameDoble.pack_forget()
     Ventana.mainloop()
 
 def Limpiar(init_x, init_y, end_x, end_y):
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2,frameDoble
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2,frameDoble,logs
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Limpiando zona...") 
@@ -310,6 +355,9 @@ def Limpiar(init_x, init_y, end_x, end_y):
         canvas2.create_image(225,225,image=photo2)
         canvas2.pack(fill=None, expand=False)
         canvas2.update()
+        fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+        log=fecha+"-Limpiar Zona- Matriz utilizada: "+nombre
+        logs.append(log)
         frameSingle.pack()
         frameBienvenida.pack_forget()
         frameDoble.pack_forget()
@@ -317,9 +365,12 @@ def Limpiar(init_x, init_y, end_x, end_y):
 
     else:
         messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")
+        fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+        log=fecha+"-Error: Las dimensiones seleccionadas estan fuera del rango de la imagen-Limpiar-"+nombre
+        logs.append(log)
 
 def lineaVertical(init_x, init_y, largo):
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble, logs
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Creando linea vertical...") 
@@ -375,17 +426,26 @@ def lineaVertical(init_x, init_y, largo):
             canvas2.create_image(225,225,image=photo2)
             canvas2.pack(fill=None, expand=False)
             canvas2.update()
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-Insertar linea vertical- Matriz utilizada: "+nombre
+            logs.append(log)
             frameSingle.pack()
             frameBienvenida.pack_forget()
             frameDoble.pack_forget()
             Ventana.mainloop()
         else:
             messagebox.showwarning(message="Debe elegir una longitud dentro del tamaño de la imagen", title="Error")
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-Error: La longitud de linea seleccionada supera los limites de la imagen-Linea Vertical-Matriz:"+nombre
+            logs.append(log)
     else:
-        messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")  
+        messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")
+        fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+        log=fecha+"-Error: Coordenadas inexistentes en la imagen-Matriz:"+nombre
+        logs.append(log)  
 
 def lineaHorizontal(init_x, init_y, largo):
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble,logs
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Creando linea horizontal...") 
@@ -441,14 +501,23 @@ def lineaHorizontal(init_x, init_y, largo):
             canvas2.create_image(225,225,image=photo2)
             canvas2.pack(fill=None, expand=False)
             canvas2.update()
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-Insertar linea horizontal- Matriz utilizada: "+nombre
+            logs.append(log)
             frameSingle.pack()
             frameBienvenida.pack_forget()
             frameDoble.pack_forget()
             Ventana.mainloop()
         else:
             messagebox.showwarning(message="Debe elegir una longitud dentro del tamaño de la imagen", title="Error")
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-Error: La longitud de linea seleccionada supera los limites de la imagen-Linea Horizontal-Matriz:"+nombre
+            logs.append(log)
     else:
-        messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")    
+        messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")
+        fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+        log=fecha+"-Error: Coordenadas inexistentes en la imagen-Linea Horizontal-Matriz:"+nombre
+        logs.append(log)    
 
 def ventanaCoordenadas():
     import tkinter as tk
@@ -570,7 +639,7 @@ def ventanaSingle():
     boton8.config(bg="grey14",fg="white")
 
 def union():
-    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble
+    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble, logs
     nombre1= str(eleccionDoble1.get())
     nombre2=str(eleccionDoble2.get())
     print("Esta es la primer matriz seleccionada:"+str(nombre1))
@@ -639,17 +708,26 @@ def union():
             canvasDoble2.update()
             canvasDoble1.update()
             canvasDoble3.update()
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-Union- Matrices utilizadas: "+nombre1+", "+nombre2
+            logs.append(log)
             frameDoble.pack()
             frameBienvenida.pack_forget()
             frameSingle.pack_forget()
             Ventana.mainloop()
         else:
-            messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")        
+            messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-Error: Las matrices seleccionadas tienen diferentes dimensiones-Union-Matrices:"+nombre1+", "+nombre2
+            logs.append(log)        
     else:
         messagebox.showwarning(message="Debe elegir matrices distintas", title="Error")
+        fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+        log=fecha+"-Error: Se selecciono dos veces la misma matriz-Union-Matrices:"+nombre1+", "+nombre2
+        logs.append(log)
 
 def interseccion():
-    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble
+    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble,logs
     nombre1= str(eleccionDoble1.get())
     nombre2=str(eleccionDoble2.get())
     print("Esta es la primer matriz seleccionada:"+str(nombre1))
@@ -718,18 +796,27 @@ def interseccion():
             canvasDoble2.update()
             canvasDoble1.update()
             canvasDoble3.update()
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-Intersección- Matrices utilizadas: "+nombre1+", "+nombre2
+            logs.append(log)
             frameDoble.pack()
             frameBienvenida.pack_forget()
             frameSingle.pack_forget()
             Ventana.mainloop()
         else:
-            messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")        
+            messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-Error: Las matrices seleccionadas tienen diferentes dimensiones-Intersección-Matrices:"+nombre1+", "+nombre2
+            logs.append(log)          
     else:
         messagebox.showwarning(message="Debe elegir matrices distintas", title="Error")
+        fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+        log=fecha+"-Error: Se eligió dos veces la misma matriz-Interseccion-Matrices:"+nombre1+", "+nombre2
+        logs.append(log)  
 
 def diferencia():
 
-    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble
+    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble, logs
     nombre1= str(eleccionDoble1.get())
     nombre2=str(eleccionDoble2.get())
     print("Esta es la primer matriz seleccionada:"+str(nombre1))
@@ -804,17 +891,26 @@ def diferencia():
             canvasDoble2.update()
             canvasDoble1.update()
             canvasDoble3.update()
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-Diferencia- Matrices utilizadas: "+nombre1+", "+nombre2
+            logs.append(log)
             frameDoble.pack()
             frameBienvenida.pack_forget()
             frameSingle.pack_forget()
             Ventana.mainloop()
         else:
-            messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")        
+            messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-Error: Las matrices seleccionadas tienen diferentes dimensiones-Diferencia-Matrices:"+nombre1+", "+nombre2
+            logs.append(log)          
     else:
         messagebox.showwarning(message="Debe elegir matrices distintas", title="Error")
+        fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+        log=fecha+"-Error: Se eligio dos veces la misma matriz-Diferencia-Matrices:"+nombre1+", "+nombre2
+        logs.append(log)  
 
 def diferenciaSimetrica():
-    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble
+    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble, logs
     nombre1= str(eleccionDoble1.get())
     nombre2=str(eleccionDoble2.get())
     print("Esta es la primer matriz seleccionada:"+str(nombre1))
@@ -889,14 +985,23 @@ def diferenciaSimetrica():
             canvasDoble2.update()
             canvasDoble1.update()
             canvasDoble3.update()
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-Diferencia Simetrica- Matrices utilizadas: "+nombre1+", "+nombre2
+            logs.append(log)
             frameDoble.pack()
             frameBienvenida.pack_forget()
             frameSingle.pack_forget()
             Ventana.mainloop()
         else:
-            messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")        
+            messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")
+            fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+            log=fecha+"-Error: Las matrices seleccionadas tienen diferentes dimensiones-Diferencia-Matrices:"+nombre1+", "+nombre2
+            logs.append(log)        
     else:
         messagebox.showwarning(message="Debe elegir matrices distintas", title="Error")
+        fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
+        log=fecha+"-Error: Se eligio dos veces la misma matriz-Diferencia-Matrices:"+nombre1+", "+nombre2
+        logs.append(log)
 
 def ventanaDoble():
     
@@ -1132,7 +1237,7 @@ boton2.pack()
 boton2.place(relx = 0.2, rely = 0)
 boton2.config(bg="grey14",fg="white")
 
-boton3=Button(frameBotones,text="Reportes",height = 1,width = 15, font=fontBotones,relief="flat")
+boton3=Button(frameBotones,text="Reportes",height = 1,width = 15, font=fontBotones,relief="flat", command=generarLogs)
 boton3.pack()
 boton3.place(relx = 0.4, rely = 0)
 boton3.config(bg="grey14",fg="white")
