@@ -14,14 +14,17 @@ from PIL import Image, ImageTk
 from tkinter import messagebox
 import time
 import os
+
 tree = None
 root=None
 matrices=lista()
 nombresMatrices=list()
+entradas=list()
 logs=list()
+errores=list()
 
 def generarLogs():
-    global logs
+    global logs, entradas, errores
     inicio='''<!DOCTYPE html>
     <html>
     <head>
@@ -33,12 +36,18 @@ def generarLogs():
       <h1 style="font-size:300%;text-align:center;padding-top:25px;padding-botton:30px;font-family:candara;">Logs</h1>
     </div>
     <hr>
-    <div style="font-size:100%;text-align:left;padding-top:25px;padding-botton:25px;font-family:Arial;;padding-left:150px;">'''
+    <div style="font-size:100%;text-align:left;padding-top:25px;padding-botton:25px;font-family:Arial;;"><h2 style="text-align:center;padding-top:10px;padding-botton:30px;font-family:candara;">Entradas</h2>'''
     mitad=""
+    for element in entradas:
+        mitad=mitad+"<p style=\"padding-left:150px\">"+element+"</p>"
+    operaciones='<h2 style="text-align:center;padding-top:25px;padding-botton:30px;font-family:candara;">Operaciones</h2>'    
     for element in logs:
-        mitad=mitad+"<p>"+element+"</p>"
+        operaciones=operaciones+"<p style=\"padding-left:150px\">"+element+"</p>"
+    err='<h2 style="text-align:center;padding-top:25px;padding-botton:30px;font-family:candara;">Errores</h2>'
+    for element in errores:
+        err=err+"<p style=\"padding-left:150px\">"+element+"</p>"    
     fin='''</div></body></html>'''  
-    cadena=inicio+mitad+fin
+    cadena=inicio+mitad+operaciones+err+fin
     f = open ('lOGS.html','w')
     f.write(cadena)
     f.close()
@@ -71,7 +80,7 @@ def generarImagen(matriz, m , n, nombre):
     s.render()
 
 def carga():
-        global tree,root,matrices,nombresMatrices,logs
+        global tree,root,matrices,nombresMatrices,logs, entradas
     
         ventana=Tk()
        
@@ -113,12 +122,11 @@ def carga():
             matrices.add(m,n,nombre,imagen)
             fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
             log=fecha+"-"+nombre+"-"+"Espacios llenos:"+str(llenos)+"-Espacios vacios:"+str(vacios)
-            logs.append(log)
+            entradas.append(log)
             nombresMatrices.append(nombre)                   
             generarImagen(imagen,m,n,nombre)
         messagebox.showinfo(message="Archivo leido exitosamente", title="Done")
-        for element in logs:
-            print(element)
+        
         ventana.destroy()
 
 def ventanaOperaciones1():
@@ -301,7 +309,7 @@ def transponer():
     Ventana.mainloop()
 
 def Limpiar(init_x, init_y, end_x, end_y):
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2,frameDoble,logs
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2,frameDoble,logs,errores
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Limpiando zona...") 
@@ -367,10 +375,10 @@ def Limpiar(init_x, init_y, end_x, end_y):
         messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")
         fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         log=fecha+"-Error: Las dimensiones seleccionadas estan fuera del rango de la imagen-Limpiar-"+nombre
-        logs.append(log)
+        errores.append(log)
 
 def lineaVertical(init_x, init_y, largo):
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble, logs
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble, logs, errores
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Creando linea vertical...") 
@@ -437,15 +445,15 @@ def lineaVertical(init_x, init_y, largo):
             messagebox.showwarning(message="Debe elegir una longitud dentro del tamaño de la imagen", title="Error")
             fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
             log=fecha+"-Error: La longitud de linea seleccionada supera los limites de la imagen-Linea Vertical-Matriz:"+nombre
-            logs.append(log)
+            errores.append(log)
     else:
         messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")
         fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         log=fecha+"-Error: Coordenadas inexistentes en la imagen-Matriz:"+nombre
-        logs.append(log)  
+        errores.append(log)  
 
 def lineaHorizontal(init_x, init_y, largo):
-    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble,logs
+    global eleccionSingle, frameSingle, frameBienvenida, Ventana, panel1 , img1, canvas1, img2, canvas2, panel2, frameDoble,logs,errores
     nombre= str(eleccionSingle.get())
     print("Esta es la matriz seleccionada:"+str(nombre))
     print("Creando linea horizontal...") 
@@ -512,12 +520,13 @@ def lineaHorizontal(init_x, init_y, largo):
             messagebox.showwarning(message="Debe elegir una longitud dentro del tamaño de la imagen", title="Error")
             fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
             log=fecha+"-Error: La longitud de linea seleccionada supera los limites de la imagen-Linea Horizontal-Matriz:"+nombre
-            logs.append(log)
+            errores.append(log)
     else:
         messagebox.showwarning(message="Debe elegir coordenadas dentro del rango de la matriz seleccionada", title="Error")
         fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         log=fecha+"-Error: Coordenadas inexistentes en la imagen-Linea Horizontal-Matriz:"+nombre
-        logs.append(log)    
+        errores.append(log)    
+
 
 def ventanaCoordenadas():
     import tkinter as tk
@@ -639,7 +648,7 @@ def ventanaSingle():
     boton8.config(bg="grey14",fg="white")
 
 def union():
-    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble, logs
+    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble, logs,errores
     nombre1= str(eleccionDoble1.get())
     nombre2=str(eleccionDoble2.get())
     print("Esta es la primer matriz seleccionada:"+str(nombre1))
@@ -719,15 +728,15 @@ def union():
             messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")
             fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
             log=fecha+"-Error: Las matrices seleccionadas tienen diferentes dimensiones-Union-Matrices:"+nombre1+", "+nombre2
-            logs.append(log)        
+            errores.append(log)        
     else:
         messagebox.showwarning(message="Debe elegir matrices distintas", title="Error")
         fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         log=fecha+"-Error: Se selecciono dos veces la misma matriz-Union-Matrices:"+nombre1+", "+nombre2
-        logs.append(log)
+        errores.append(log)
 
 def interseccion():
-    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble,logs
+    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble,logs,errores
     nombre1= str(eleccionDoble1.get())
     nombre2=str(eleccionDoble2.get())
     print("Esta es la primer matriz seleccionada:"+str(nombre1))
@@ -807,16 +816,16 @@ def interseccion():
             messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")
             fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
             log=fecha+"-Error: Las matrices seleccionadas tienen diferentes dimensiones-Intersección-Matrices:"+nombre1+", "+nombre2
-            logs.append(log)          
+            errores.append(log)          
     else:
         messagebox.showwarning(message="Debe elegir matrices distintas", title="Error")
         fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         log=fecha+"-Error: Se eligió dos veces la misma matriz-Interseccion-Matrices:"+nombre1+", "+nombre2
-        logs.append(log)  
+        errores.append(log)  
 
 def diferencia():
 
-    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble, logs
+    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble, logs,errores
     nombre1= str(eleccionDoble1.get())
     nombre2=str(eleccionDoble2.get())
     print("Esta es la primer matriz seleccionada:"+str(nombre1))
@@ -902,15 +911,15 @@ def diferencia():
             messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")
             fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
             log=fecha+"-Error: Las matrices seleccionadas tienen diferentes dimensiones-Diferencia-Matrices:"+nombre1+", "+nombre2
-            logs.append(log)          
+            errores.append(log)          
     else:
         messagebox.showwarning(message="Debe elegir matrices distintas", title="Error")
         fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         log=fecha+"-Error: Se eligio dos veces la misma matriz-Diferencia-Matrices:"+nombre1+", "+nombre2
-        logs.append(log)  
+        errores.append(log)  
 
 def diferenciaSimetrica():
-    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble, logs
+    global eleccionDoble1, eleccionDoble2, frameSingle, Ventana, frameBienvenida ,frameDoble, panelDoble1,panelDoble2,panelDoble3, canvasDoble1,canvasDoble2,canvasDoble3, img2Doble, img1Doble, img3Doble, logs,errores
     nombre1= str(eleccionDoble1.get())
     nombre2=str(eleccionDoble2.get())
     print("Esta es la primer matriz seleccionada:"+str(nombre1))
@@ -996,12 +1005,12 @@ def diferenciaSimetrica():
             messagebox.showwarning(message="Ambas matrices deben tener dimensiones iguales", title="Error")
             fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
             log=fecha+"-Error: Las matrices seleccionadas tienen diferentes dimensiones-Diferencia-Matrices:"+nombre1+", "+nombre2
-            logs.append(log)        
+            errores.append(log)        
     else:
         messagebox.showwarning(message="Debe elegir matrices distintas", title="Error")
         fecha=time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
         log=fecha+"-Error: Se eligio dos veces la misma matriz-Diferencia-Matrices:"+nombre1+", "+nombre2
-        logs.append(log)
+        errores.append(log)
 
 def ventanaDoble():
     
@@ -1158,6 +1167,45 @@ def ventanaLineaVertical():
     boton1.place(relx = 0.5, rely = 0.8)
     boton1.config(bg="grey14",fg="white")
 
+def documentacio():
+    os.system("Ensayo.pdf")
+
+def aboutUS():
+    Vent1 = tk.Toplevel()
+    Vent1.title("Ayuda")
+    Vent1.geometry("425x400")
+    Vent1.config(bg="grey14")
+    
+    label= Label(Vent1, text="Steven Josue González Monroy ", font=('Arial', 15) )
+    label2= Label(Vent1, text="201903974", font=('Arial', 16) )
+    label3= Label(Vent1, text='IPC2 Seccion: "D"', font=('Arial', 16), )
+    
+    label.pack()
+    label2.pack()
+    label3.pack()
+    label.place(relx=0.15, rely=0.2)
+    label2.place(relx=0.3, rely=0.4)
+    label3.place(relx=0.2, rely= 0.6)
+    label.config(bg="grey14",fg="white")
+    label2.config(bg="grey14",fg="white")
+    label3.config(bg="grey14", fg="white")
+
+def ventanaAyuda():
+    Vent1 = tk.Toplevel()
+    Vent1.title("Ayuda")
+    Vent1.geometry("500x400")
+    Vent1.config(bg="grey14")
+
+    boton1= Button(Vent1, text="About Us",height = 1,width = 15, font=fontBotones,relief=RAISED, command=aboutUS )
+    boton2= Button(Vent1, text="Documentacion",height = 1,width = 15, font=fontBotones,relief=RAISED, command=documentacio )
+
+    boton1.pack()
+    boton2.pack()
+    boton1.place(relx=0.3, rely=0.2)
+    boton2.place(relx=0.3, rely=0.5)
+    boton2.config(bg="grey14",fg="white")
+    boton1.config(bg="grey14",fg="white")
+
 Ventana = Tk()
 Ventana.title("Pricipal")
 Ventana.geometry("1200x650")
@@ -1242,7 +1290,7 @@ boton3.pack()
 boton3.place(relx = 0.4, rely = 0)
 boton3.config(bg="grey14",fg="white")
 
-boton4=Button(frameBotones,text="Ayuda",height = 1,width = 15, font=fontBotones,relief="flat")
+boton4=Button(frameBotones,text="Ayuda",height = 1,width = 15, font=fontBotones,relief="flat", command=ventanaAyuda)
 boton4.pack()
 boton4.place(relx = 0.6, rely = 0)
 boton4.config(bg="grey14",fg="white")
@@ -1283,8 +1331,3 @@ label.place(relx = 0.1, rely = 0.3)
 
 Ventana.mainloop()
 
-
-def limpiar():
-    global root, tree
-    root=None
-    tree=None
